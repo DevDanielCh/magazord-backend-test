@@ -60,6 +60,9 @@ Será realizado um simples sistema de contatos, utilizando PHP, JS, HTML, CSS e 
 
 - RNF07 - O sistema deverá ter seu controle de versão no Github.
 
+> [!NOTE]
+> **Diferencial:** a presença de testes unitários no Back-end (ex.: PHPUnit), cobrindo as regras de negócio e as operações de CRUD, será considerada um diferencial na avaliação.
+
 
 ## Regra de Negócio:
 
