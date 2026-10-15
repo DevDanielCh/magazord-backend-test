@@ -1,8 +1,8 @@
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 
-* [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
+- Docker e Docker Compose instalados.
 
 ### Passo a Passo
 
@@ -13,7 +13,7 @@
    cd magazord-backend-test
    ```
 
-2. **Subir os containers (Tudo é configurado automaticamente):**
+2. **Subir os containers (tudo configurado automaticamente):**
 
    ```bash
    docker compose up -d --build
@@ -21,20 +21,21 @@
 
 3. **Acessar a aplicação:**
 
-   Abra seu navegador em: `http://localhost:8080`
+   Abra o navegador em `http://localhost:8080`.
 
-## 🧪 Executando os Testes Unitários
-
-Para rodar a suíte de testes unitários desenvolvida com PHPUnit:
+## Executando os Testes
 
 ```bash
 docker exec -it app vendor/bin/phpunit
 ```
----
 
-## 🗺 Algumas explicações das decisões
+## Decisões
 
+### `entrypoint.sh`
 
-### Arquivo `entrypoint.sh`
+Criei esse arquivo pra concentrar a inicialização do projeto num comando só
+(`docker compose up -d --build`), deixando a validação simples e reproduzível.
 
-Criei esse arquivo para concentrar toda a inicialização do projeto em **um único comando** (`docker compose up -d --build`), tornando a validação simples e reproduzível.
+### Busca por nome de pessoas
+
+Fiz a busca usando um índice de fulltext para assim trazer resultados mais consistentes com a busca.

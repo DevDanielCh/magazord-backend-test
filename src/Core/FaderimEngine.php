@@ -21,6 +21,17 @@ class FaderimEngine
             isDevMode: true
         );
 
+        // /tmp tem sticky bit, então proxies gerados pelo CLI (root) não podem
+        // ser sobrescritos pelo Apache (www-data). Usamos um dir dedicado 777.
+        $proxyDir = sys_get_temp_dir() . '/doctrine-proxies';
+
+        if (!is_dir($proxyDir)) {
+            @mkdir($proxyDir, 0777, true);
+        }
+
+        $config->setProxyDir($proxyDir);
+        $config->setProxyNamespace('App\Proxies');
+
         // Esses parametros default só se faz em app de testes como esse, em casos reais nunca devemos colocar essa informações hardcoded
         $connectionParams = [
             'driver'   => 'pdo_pgsql',
@@ -43,6 +54,11 @@ class FaderimEngine
         }
 
         return self::$instance;
+    }
+
+    public static function reset(): void
+    {
+        self::$instance = null;
     }
 
     public function getEntityManager(): EntityManager

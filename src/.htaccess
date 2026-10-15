@@ -1,0 +1,7 @@
+DirectoryIndex bootstrap.php
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ bootstrap.php [QSA,L]
