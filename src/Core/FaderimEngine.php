@@ -21,8 +21,6 @@ class FaderimEngine
             isDevMode: true
         );
 
-        // /tmp tem sticky bit, então proxies gerados pelo CLI (root) não podem
-        // ser sobrescritos pelo Apache (www-data). Usamos um dir dedicado 777.
         $proxyDir = sys_get_temp_dir() . '/doctrine-proxies';
 
         if (!is_dir($proxyDir)) {
