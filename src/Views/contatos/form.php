@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\Model\Contato $contact
  * @var \App\Model\Pessoa $person
@@ -44,7 +45,8 @@ if ($selectedType === '' && $isEdit) {
             <div class="mb-3">
                 <label for="descricao" class="form-label">Descrição *</label>
                 <input type="text" class="form-control" id="descricao" name="descricao" maxlength="255" required
-                       value="<?= escape(old('descricao', $contact->getDescricao())) ?>">
+                    value="<?= escape(old('descricao', $contact->getDescricao())) ?>"
+                    oninput="filtrarDescricao()">
             </div>
 
             <div class="d-flex gap-3 mt-4">
@@ -56,26 +58,46 @@ if ($selectedType === '' && $isEdit) {
 </div>
 
 <script>
-function trocarTipo() {
-    var typeSelect = document.getElementById('tipo');
-    var field = document.getElementById('descricao');
+    function trocarTipo() {
+        var typeSelect = document.getElementById('tipo');
+        var field = document.getElementById('descricao');
 
-    if (typeSelect.value === '1') {
-        field.setAttribute('type', 'text');
-        field.setAttribute('pattern', '[0-9]{8,20}');
-        field.setAttribute('inputmode', 'numeric');
-        field.setAttribute('placeholder', '11999999999');
-    } else if (typeSelect.value === '2') {
-        field.setAttribute('type', 'email');
-        field.removeAttribute('pattern');
-        field.removeAttribute('inputmode');
-        field.setAttribute('placeholder', 'exemplo@dominio.com');
-    } else {
-        field.setAttribute('type', 'text');
-        field.removeAttribute('pattern');
-        field.removeAttribute('inputmode');
-        field.setAttribute('placeholder', '');
+        if (typeSelect.value === '1') {
+            field.setAttribute('type', 'text');
+            field.setAttribute('maxlength', '11');
+            field.setAttribute('pattern', '[0-9]{10,11}');
+            field.setAttribute('inputmode', 'numeric');
+            field.setAttribute('placeholder', '47999999999');
+            filtrarDescricao();
+        } else if (typeSelect.value === '2') {
+            field.setAttribute('type', 'email');
+            field.setAttribute('maxlength', '255');
+            field.removeAttribute('pattern');
+            field.removeAttribute('inputmode');
+            field.setAttribute('placeholder', 'exemplo@dominio.com');
+        } else {
+            field.setAttribute('type', 'text');
+            field.setAttribute('maxlength', '255');
+            field.removeAttribute('pattern');
+            field.removeAttribute('inputmode');
+            field.setAttribute('placeholder', '');
+        }
     }
-}
-trocarTipo();
+
+    function filtrarDescricao() {
+        var typeSelect = document.getElementById('tipo');
+        var field = document.getElementById('descricao');
+
+        if (typeSelect.value !== '1') {
+            return;
+        }
+
+        var digits = field.value.replace(/\D/g, '').slice(0, 11);
+
+        if (digits !== field.value) {
+            field.value = digits;
+        }
+    }
+
+    trocarTipo();
 </script>

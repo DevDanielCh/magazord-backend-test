@@ -186,8 +186,8 @@ class ContatoController extends BaseController
 
             if ($digits === '') {
                 $errors[] = 'Telefone deve conter apenas números.';
-            } elseif (strlen($digits) < 8 || strlen($digits) > 20) {
-                $errors[] = 'Telefone deve ter entre 8 e 20 dígitos.';
+            } elseif (strlen($digits) < 10 || strlen($digits) > 11) {
+                $errors[] = 'Telefone deve ter 10 ou 11 dígitos (DDD + número).';
             }
         } elseif ((int) $type === TipoContato::Email->value && !filter_var($description, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Email inválido.';
