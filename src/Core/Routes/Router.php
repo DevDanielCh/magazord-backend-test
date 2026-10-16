@@ -6,6 +6,15 @@ final class Router
 {
     private array $routes = [];
 
+    private array $handlers = [];
+
+    public function get(string $path, callable $handler): self
+    {
+        $this->handlers[$path] = $handler;
+
+        return $this;
+    }
+
     public function page(
         string $path,
         string $controller,
@@ -29,6 +38,11 @@ final class Router
     public function dispatch(string $method, string $path): never
     {
         $path = $path === '' ? '/pessoas' : $path;
+
+        if (isset($this->handlers[$path])) {
+            ($this->handlers[$path])();
+            exit;
+        }
 
         $route = $this->routes[$path] ?? null;
 

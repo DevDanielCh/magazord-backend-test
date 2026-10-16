@@ -16,7 +16,7 @@
 2. **Subir os containers (tudo configurado automaticamente):**
 
    ```bash
-   docker compose up -d --build
+   docker compose up -d --build --wait
    ```
 
 3. **Acessar a aplicação:**

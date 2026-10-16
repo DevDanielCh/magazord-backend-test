@@ -5,6 +5,12 @@ use App\Core\Routes\Router;
 
 $router = new Router();
 
+$router->get('/health', function (): void {
+    header('Content-Type: application/json');
+    http_response_code(200);
+    echo json_encode(['status' => 'ok']);
+});
+
 $router->page(
     path: '/pessoas',
     controller: ControllerFactory::PESSOAS,
