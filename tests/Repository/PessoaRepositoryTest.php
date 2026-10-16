@@ -55,6 +55,35 @@ class PessoaRepositoryTest extends DatabaseTestCase
         $this->assertSame([], $repository->searchByName('inexistente'));
     }
 
+    public function testSearchFallsBackToLikeWhenFulltextMisses(): void
+    {
+        $this->em->persist($this->createPerson('BANANA', '11144477735'));
+        $this->em->flush();
+        $this->em->clear();
+
+        $repository = $this->em->getRepository(Pessoa::class);
+
+        $result = $repository->searchByName('BANA');
+        $this->assertCount(1, $result);
+        $this->assertSame('BANANA', $result[0]->getNome());
+
+        $substring = $repository->searchByName('NANA');
+        $this->assertCount(1, $substring);
+        $this->assertSame('BANANA', $substring[0]->getNome());
+    }
+
+    public function testSearchLikeEscapesWildcards(): void
+    {
+        $this->em->persist($this->createPerson('BANANA', '11144477735'));
+        $this->em->flush();
+        $this->em->clear();
+
+        $repository = $this->em->getRepository(Pessoa::class);
+
+        $this->assertSame([], $repository->searchByName('%anana%'));
+        $this->assertSame([], $repository->searchByName('_anana'));
+    }
+
     public function testEmptySearchReturnsAll(): void
     {
         $this->em->persist($this->createPerson('Yuri Mateus Bryan Teixeira', '73409512969'));

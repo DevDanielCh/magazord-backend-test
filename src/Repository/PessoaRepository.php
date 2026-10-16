@@ -14,16 +14,29 @@ class PessoaRepository extends EntityRepository
             return $this->findAll();
         }
 
-        $sql = <<<'SQL'
+        $connection = $this->getEntityManager()->getConnection();
+
+        $fulltextSql = <<<'SQL'
             SELECT pessoa.id
             FROM pessoa pessoa
             WHERE to_tsvector('portuguese', pessoa.nome) @@ plainto_tsquery('portuguese', :q)
             ORDER BY pessoa.nome ASC
         SQL;
 
-        $ids = $this->getEntityManager()
-            ->getConnection()
-            ->fetchFirstColumn($sql, ['q' => $nameSearch]);
+        $ids = $connection->fetchFirstColumn($fulltextSql, ['q' => $nameSearch]);
+
+        if ($ids === []) {
+            $likeSql = <<<'SQL'
+                SELECT pessoa.id
+                FROM pessoa pessoa
+                WHERE pessoa.nome ILIKE :q ESCAPE '\'
+                ORDER BY pessoa.nome ASC
+            SQL;
+
+            $ids = $connection->fetchFirstColumn($likeSql, [
+                'q' => '%' . addcslashes($nameSearch, '%_\\') . '%',
+            ]);
+        }
 
         if ($ids === []) {
             return [];
